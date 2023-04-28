@@ -13,9 +13,8 @@ namespace ThienAspWebApi.Repository.Implement
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            var categoriesQr = FindAll()
-                                        .AsQueryable();
-            return await categoriesQr.ToListAsync();
+           
+            return await FindAll().ToListAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)

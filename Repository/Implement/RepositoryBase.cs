@@ -4,9 +4,9 @@ using ThienAspWebApi.Repository.Interface;
 
 namespace ThienAspWebApi.Repository.Implement
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private readonly AppStoreContext _context;
+        private protected AppStoreContext _context { get; set; }
 
         public RepositoryBase(AppStoreContext context)
         {

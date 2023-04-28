@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThienAspWebApi.Database;
 
@@ -10,9 +11,10 @@ using ThienAspWebApi.Database;
 namespace ThienAspWebApi.Migrations
 {
     [DbContext(typeof(AppStoreContext))]
-    partial class BanhMiStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230428040152_addConstraintCate_Typecate_Product")]
+    partial class addConstraintCate_Typecate_Product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

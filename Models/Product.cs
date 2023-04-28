@@ -13,6 +13,8 @@ namespace ThienAspWebApi.Models
         [Required]
         public double Price { get; set; }
 
+        public int TypeCateId { get; set; }
+
         public TypeCate? TypeCate { get; set; }
     }
 }

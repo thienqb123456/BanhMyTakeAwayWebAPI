@@ -17,28 +17,31 @@ namespace ThienAspWebApi.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
             try
             {
                 var categories = await _repo.CategoryRepo.GetAllCategoriesAsync();
                 return Ok(categories);
-            } catch
+            } catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-            
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult> GetCategory(int id)
         {
-            var category = await _repo.CategoryRepo.GetCategoryByIdAsync(id);
-
-            if (category == null) { return NotFound($"not found cate has id = {id}"); }
-
-            return Ok(category);
+            try
+            {
+                var category = await _repo.CategoryRepo.GetCategoryByIdAsync(id);
+                if (category == null) { return NotFound($"not found cate has id = {id}"); }
+                return Ok(category);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Categories
@@ -46,14 +49,15 @@ namespace ThienAspWebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            if (_repo.CategoryRepo == null)
+            try
             {
-                return Problem("Entity set 'AppStoreContext.Categories'  is null.");
+                _repo.CategoryRepo.CreateCategory(category);
+                await _repo.SaveAsync();
+                return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            _repo.CategoryRepo.CreateCategory(category);
-            await _repo.SaveAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
         }
 
         // PUT: api/Categories/5
@@ -61,33 +65,36 @@ namespace ThienAspWebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
-            if (id != category.Id)
+            try
             {
-                return BadRequest();
+                if (id != category.Id)
+                {
+                    return NotFound(category);
+                }
+                _repo.CategoryRepo.UpdateCategory(category);
+                await _repo.SaveAsync();
+                return Ok(category);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            _repo.CategoryRepo.UpdateCategory(category);
-            await _repo.SaveAsync();
-            return NoContent();
         }
-
-
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            if (_repo.CategoryRepo == null)
+            try
             {
-                return NotFound($"Not found any category");
+                var category = await _repo.CategoryRepo.GetCategoryByIdAsync(id);
+                if (category == null) { return NotFound($"Not found category has id = {id}"); }
+                _repo.CategoryRepo.DeleteCategory(category);
+                await _repo.SaveAsync();
+                return Ok($"Deleted category has id {id} successfully! ");
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            var category = await _repo.CategoryRepo.GetCategoryByIdAsync(id);
-            if (category == null) { return NotFound($"Not found cate has id = {id}"); }
-
-            _repo.CategoryRepo.DeleteCategory(category);
-            await _repo.SaveAsync();
-
-            return NoContent();
         }
-
     }
 }
