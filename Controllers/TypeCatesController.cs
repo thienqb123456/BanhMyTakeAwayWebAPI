@@ -23,7 +23,7 @@ namespace ThienAspWebApi.Controllers
             {
                 var typecates = await _repo.TypeCateRepo.GetAllTypeCatesAsync();
                 return Ok(typecates);
-            } catch (Exception ex) { return BadRequest(ex.Message); }
+            } catch (Exception ex) { return StatusCode(500, ex.Message); }
         }
 
         // GET: api/TypeCates/5
@@ -35,7 +35,24 @@ namespace ThienAspWebApi.Controllers
                 var typecate = await _repo.TypeCateRepo.GetTypeCateByIdAsync(id);
                 if (typecate == null) return NotFound($"Not found typecate has id = {id}");
                 return Ok(typecate);
-            } catch (Exception ex) { return BadRequest(ex.Message); }
+            } catch (Exception ex) { return StatusCode(500, ex.Message); }
+        }
+
+        // POST: api/TypeCates
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<TypeCate>> PostTypeCate(TypeCate typeCate)
+        {
+            try
+            {
+                _repo.TypeCateRepo.CreateTypeCate(typeCate);
+                await _repo.SaveAsync();
+                return CreatedAtAction("GetTypeCate", new { id = typeCate.Id }, typeCate);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);          
+            }
         }
 
         // PUT: api/TypeCates/5
@@ -50,23 +67,7 @@ namespace ThienAspWebApi.Controllers
                 await _repo.SaveAsync();
                 return Ok(typeCate);
 
-            } catch (Exception ex) { return BadRequest(ex.Message); }
-        }
-
-        // POST: api/TypeCates
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<TypeCate>> PostTypeCate(TypeCate typeCate)
-        {
-          try
-            {
-                _repo.TypeCateRepo.CreateTypeCate(typeCate);
-                await _repo.SaveAsync();
-                return CreatedAtAction("GetTypeCate", new {id = typeCate.Id}, typeCate);
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            } catch (Exception ex) { return Problem(ex.Message); }
         }
 
         // DELETE: api/TypeCates/5
@@ -82,7 +83,7 @@ namespace ThienAspWebApi.Controllers
                 return Ok($"Deleted typeCate has id = {id} successfully!");
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 

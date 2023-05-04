@@ -19,7 +19,9 @@ namespace ThienAspWebApi.Repository.Implement
 
         public async Task<TypeCate> GetTypeCateByIdAsync(int id)
         {
-            var typeCate = await FindByCondition(type => type.Id == id).FirstOrDefaultAsync();
+            var typeCate = await FindByCondition(type => type.Id == id)
+                                .Include(type => type.Products)
+                                .FirstOrDefaultAsync();
             return typeCate!;
         }
 

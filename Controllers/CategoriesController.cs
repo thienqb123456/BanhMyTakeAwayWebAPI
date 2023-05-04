@@ -23,9 +23,9 @@ namespace ThienAspWebApi.Controllers
             {
                 var categories = await _repo.CategoryRepo.GetAllCategoriesAsync();
                 return Ok(categories);
-            } catch(Exception ex)
+            } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -38,9 +38,10 @@ namespace ThienAspWebApi.Controllers
                 var category = await _repo.CategoryRepo.GetCategoryByIdAsync(id);
                 if (category == null) { return NotFound($"not found cate has id = {id}"); }
                 return Ok(category);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -54,9 +55,10 @@ namespace ThienAspWebApi.Controllers
                 _repo.CategoryRepo.CreateCategory(category);
                 await _repo.SaveAsync();
                 return CreatedAtAction("GetCategory", new { id = category.Id }, category);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -74,9 +76,10 @@ namespace ThienAspWebApi.Controllers
                 _repo.CategoryRepo.UpdateCategory(category);
                 await _repo.SaveAsync();
                 return Ok(category);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -91,9 +94,10 @@ namespace ThienAspWebApi.Controllers
                 _repo.CategoryRepo.DeleteCategory(category);
                 await _repo.SaveAsync();
                 return Ok($"Deleted category has id {id} successfully! ");
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
     }

@@ -14,12 +14,15 @@ namespace ThienAspWebApi.Repository.Implement
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
            
-            return await FindAll().ToListAsync();
+            return await FindAll()
+                                  .ToListAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            var category = await FindByCondition(cate => cate.Id == id).FirstOrDefaultAsync();
+            var category = await FindByCondition(cate => cate.Id == id)
+                                 .Include(cate => cate.TypeCates)
+                                 .FirstOrDefaultAsync();
             return category!;
         }
 

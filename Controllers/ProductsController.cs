@@ -53,6 +53,7 @@ namespace ThienAspWebApi.Controllers
         {
             try
             {
+                
                 _repo.ProductRepo.CreateProduct(product);
                 await _repo.SaveAsync();
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);

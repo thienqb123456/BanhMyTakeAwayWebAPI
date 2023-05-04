@@ -13,5 +13,7 @@ namespace ThienAspWebApi.Models
         [Required]
         public string? Description { get; set; }
 
+        public List<TypeCate>? TypeCates { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using ThienAspWebApi.Database;
 using ThienAspWebApi.Repository.Interface;
 
@@ -15,12 +16,12 @@ namespace ThienAspWebApi.Repository.Implement
 
         public IQueryable<T> FindAll()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return _context.Set<T>().Where(expression);
+            return _context.Set<T>().Where(expression).AsNoTracking();
         }
         public void Create(T entity)
         {
