@@ -16,5 +16,7 @@ namespace ThienAspWebApi.Models
         public int TypeCateId { get; set; }
 
         public TypeCate? TypeCate { get; set; }
+
+        public DateTime? TimeCreated { get; set; } = DateTime.Now;
     }
 }

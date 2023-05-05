@@ -16,17 +16,17 @@ namespace ThienAspWebApi.Controllers
         }
 
         // GET: api/Products
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [HttpGet()]
+        public async Task<ActionResult> GetProducts(string? searchString, string? orderBy)
         {
             try
             {
-                var products = await _repo.ProductRepo.GetAllProductsAsync();
+                var products = await _repo.ProductRepo.GetAllProductsAsync(searchString!, orderBy!);
                 return Ok(products);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -42,7 +42,7 @@ namespace ThienAspWebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -53,14 +53,13 @@ namespace ThienAspWebApi.Controllers
         {
             try
             {
-                
                 _repo.ProductRepo.CreateProduct(product);
                 await _repo.SaveAsync();
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -81,7 +80,7 @@ namespace ThienAspWebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -99,7 +98,7 @@ namespace ThienAspWebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

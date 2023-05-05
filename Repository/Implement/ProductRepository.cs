@@ -11,9 +11,39 @@ namespace ThienAspWebApi.Repository.Implement
         {
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(string searchString, string orderBy)
         {
-            var productsQr = FindAll().AsQueryable();
+            var productsQr = FindAll().OrderByDescending(p=>p.TimeCreated)
+                                      .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                productsQr = productsQr.Where(p => p.Name!.Contains(searchString)
+                                                || p.Description!.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy)
+                {
+                    case "price":
+                        productsQr = productsQr.OrderBy(p => p.Price);
+                        break;
+                    case "price_desc":
+                        productsQr = productsQr.OrderByDescending(p => p.Price);
+                        break;
+                    case "name":
+                        productsQr = productsQr.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        productsQr = productsQr.OrderByDescending(p => p.Name);
+                        break;
+                    default:
+                        productsQr = productsQr.OrderBy(p => p.TimeCreated);
+                        break;
+                }
+            }
+
             return await productsQr.ToListAsync();
         }
 
@@ -39,6 +69,5 @@ namespace ThienAspWebApi.Repository.Implement
             Delete(product);
         }
 
-        
     }
 }
