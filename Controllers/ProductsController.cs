@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ThienAspWebApi.Models;
 using ThienAspWebApi.Repository.RepositoryWrapper;
 
@@ -6,6 +7,7 @@ namespace ThienAspWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IRepositoryWrapper _repo;
@@ -17,7 +19,7 @@ namespace ThienAspWebApi.Controllers
 
         // GET: api/Products
         [HttpGet()]
-        public async Task<ActionResult> GetProducts(string? searchString, string? orderBy)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string? searchString, string? orderBy)
         {
             try
             {
